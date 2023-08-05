@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Category;
+use App\Models\Blogpost;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\BlogPost>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class BlogPostFactory extends Factory
+class CommentFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,9 +18,8 @@ class BlogPostFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->sentence,
             'body' => $this->faker->paragraph,
-            'category_id' => fn() => Category::factory()->create()->id,
+            'blogpost_id' => Blogpost::inRandomOrder()->first(),
             'user_id' => 1
         ];
     }

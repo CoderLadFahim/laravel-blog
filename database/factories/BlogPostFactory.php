@@ -20,7 +20,7 @@ class BlogpostFactory extends Factory
         return [
             'title' => $this->faker->sentence,
             'body' => $this->faker->paragraph,
-            'category_id' => fn() => Category::factory()->create()->id,
+            'category_id' => Category::inRandomOrder()->first(),
             'user_id' => 1
         ];
     }

@@ -34,6 +34,9 @@ class BlogpostController extends Controller
             'category_id' => $request->input('category_id'),
         ]);
 
+        $tagIds = array_map('intval', $request->input('tags'));
+        $new_blog_post->tags()->attach($tagIds);
+
         return $new_blog_post;
     }
 

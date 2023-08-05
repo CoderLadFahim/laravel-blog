@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BlogPost extends Model
+class Blogpost extends Model
 {
     use HasFactory;
 
@@ -15,6 +15,8 @@ class BlogPost extends Model
         'user_id',
         'category_id',
     ];
+
+    protected $table = 'blogposts';
 
     public function category() {
         return $this->belongsTo(Category::class);
@@ -28,3 +30,4 @@ class BlogPost extends Model
         return $this->belongsTo(User::class);
     }
 }
+

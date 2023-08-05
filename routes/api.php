@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BlogpostController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
@@ -37,4 +38,13 @@ Route::prefix('category')->group(function () {
     Route::get('/{category}', [CategoryController::class, 'show']);
     Route::put('/{category}', [CategoryController::class, 'update']);
     Route::delete('/{category}', [CategoryController::class, 'destroy']);
+});
+
+Route::prefix('blogpost')->group(function () {
+    Route::get('/', [BlogpostController::class, 'index']);
+    Route::post('/store', [BlogpostController::class, 'store']);
+    Route::get('/{tag}', [BlogpostController::class, 'show']);
+    Route::put('/{tag}', [BlogpostController::class, 'update']);
+    Route::delete('/{tag}', [BlogpostController::class, 'destroy']);
+    Route::delete('/{tag}', [BlogpostController::class, 'destroy']);
 });

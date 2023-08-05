@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blogpost_tags', function (Blueprint $table) {
-            $table->unsignedBigInteger('tag_id');
+        Schema::create('blogpost_tag', function (Blueprint $table) {
+
             $table->unsignedBigInteger('blogpost_id');
-            $table->foreign('tag_id')->references('id')->on('tags');
+            $table->unsignedBigInteger('tag_id');
+
             $table->foreign('blogpost_id')->references('id')->on('blogposts');
-            $table->timestamps();
+            $table->foreign('tag_id')->references('id')->on('tags');
+
         });
     }
 

@@ -57,4 +57,9 @@ class TagController extends Controller
         $tag->delete();
         return response()->json(['msg' => 'Tag deleted']);
     }
+
+    public function getBlogposts(Tag $tag)
+    {
+        return $tag->blogposts()->get();
+    }
 }

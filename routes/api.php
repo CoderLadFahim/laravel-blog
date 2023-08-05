@@ -31,6 +31,8 @@ Route::prefix('tags')->group(function () {
     Route::get('/{tag}', [TagController::class, 'show']);
     Route::put('/{tag}', [TagController::class, 'update']);
     Route::delete('/{tag}', [TagController::class, 'destroy']);
+
+    Route::get('/{tag}/blogpost', [TagController::class, 'getBlogposts']);
 });
 
 Route::prefix('category')->group(function () {

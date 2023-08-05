@@ -12,4 +12,8 @@ class Tag extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function blogposts() {
+        return $this->belongsToMany(Blogpost::class);
+    }
 }

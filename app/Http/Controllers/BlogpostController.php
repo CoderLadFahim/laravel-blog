@@ -72,4 +72,24 @@ class BlogpostController extends Controller
         $blog_post->delete();
         return response()->json(['msg' => 'Blog post deleted']);
     }
+
+    public function getComments(Blogpost $blog_post)
+    {
+        return $blog_post->comments()->get();
+    }
+
+    public function getAuthor(Blogpost $blog_post)
+    {
+        return $blog_post->author()->get();
+    }
+
+    public function getTags(Blogpost $blog_post)
+    {
+        return $blog_post->tags()->get();
+    }
+
+    public function getCategory(Blogpost $blog_post)
+    {
+        return $blog_post->category()->get();
+    }
 }

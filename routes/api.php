@@ -47,6 +47,11 @@ Route::prefix('blogpost')->group(function () {
     Route::get('/{blog_post}', [BlogpostController::class, 'show']);
     Route::put('/{blog_post}', [BlogpostController::class, 'update']);
     Route::delete('/{blog_post}', [BlogpostController::class, 'destroy']);
+
+    Route::get('/{blog_post}/comments', [BlogpostController::class, 'getComments']);
+    Route::get('/{blog_post}/author', [BlogpostController::class, 'getAuthor']);
+    Route::get('/{blog_post}/tags', [BlogpostController::class, 'getTags']);
+    Route::get('/{blog_post}/category', [BlogpostController::class, 'getCategory']);
 });
 
 Route::prefix('comments')->group(function () {

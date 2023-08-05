@@ -9,4 +9,5 @@ Models needed:
     -- BlogPost
     -- Comment
     -- Tag
+    -- Categories
 

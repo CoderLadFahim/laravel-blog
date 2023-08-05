@@ -43,9 +43,9 @@ class BlogpostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Blogpost $Blogpost)
+    public function show(Blogpost $blog_post)
     {
-        return $Blogpost;
+        return $blog_post;
     }
 
     /**

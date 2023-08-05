@@ -3,6 +3,7 @@
 use App\Http\Controllers\BlogpostController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -43,8 +44,14 @@ Route::prefix('category')->group(function () {
 Route::prefix('blogpost')->group(function () {
     Route::get('/', [BlogpostController::class, 'index']);
     Route::post('/store', [BlogpostController::class, 'store']);
-    Route::get('/{tag}', [BlogpostController::class, 'show']);
-    Route::put('/{tag}', [BlogpostController::class, 'update']);
-    Route::delete('/{tag}', [BlogpostController::class, 'destroy']);
-    Route::delete('/{tag}', [BlogpostController::class, 'destroy']);
+    Route::get('/{blog_post}', [BlogpostController::class, 'show']);
+    Route::put('/{blog_post}', [BlogpostController::class, 'update']);
+    Route::delete('/{blog_post}', [BlogpostController::class, 'destroy']);
+});
+
+Route::prefix('comments')->group(function () {
+    Route::get('/{blog_post}/{comment}', [CommentController::class, 'show']);
+    Route::post('{blog_post}/store', [CommentController::class, 'store']);
+    Route::put('/{blog_post}/{comment}', [CommentController::class, 'update']);
+    Route::delete('/{blog_post}/{comment}', [CommentController::class, 'destroy']);
 });

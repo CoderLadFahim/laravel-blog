@@ -31,7 +31,7 @@ class CategoryController extends Controller
             'name' => $request->input('name'),
         ]);
 
-        return $new_category;
+        return response()->json($new_category);
     }
 
     /**
@@ -42,7 +42,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return $category;
+        return response()->json($category);
     }
 
     /**
@@ -69,7 +69,7 @@ class CategoryController extends Controller
             'name' => $request->name,
         ]);
 
-        return $category;
+        return response()->json($category);
     }
 
     /**

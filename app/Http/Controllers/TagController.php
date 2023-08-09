@@ -26,7 +26,7 @@ class TagController extends Controller
             'name' => $request->name,
         ]);
 
-        return $new_tag;
+        return response()->json($new_tag);
     }
 
     /**
@@ -34,7 +34,7 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        return $tag;
+        return response()->json($tag);
     }
 
     /**
@@ -46,7 +46,7 @@ class TagController extends Controller
             'name' => $request->name,
         ]);
 
-        return $tag;
+        return response()->json($tag);
     }
 
     /**
@@ -60,6 +60,6 @@ class TagController extends Controller
 
     public function getBlogposts(Tag $tag)
     {
-        return $tag->blogposts()->get();
+        return response()->json($tag->blogposts()->get());
     }
 }

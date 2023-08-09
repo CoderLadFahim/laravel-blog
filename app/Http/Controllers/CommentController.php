@@ -25,7 +25,7 @@ class CommentController extends Controller
             'blogpost_id' => $blogpost->id
         ]);
 
-        return $new_comment;
+        return response()->json($new_comment);
     }
 
     public function update(Request $request, Comment $comment) {
@@ -36,7 +36,7 @@ class CommentController extends Controller
             'body' => $request->body,
         ]);
 
-        return $comment_to_update;
+        return response()->json($comment_to_update);
     }
 
     public function destroy(Comment $comment) {

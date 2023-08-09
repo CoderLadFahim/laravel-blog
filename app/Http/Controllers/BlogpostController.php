@@ -37,7 +37,7 @@ class BlogpostController extends Controller
         $tagIds = array_map('intval', $request->input('tags'));
         $new_blog_post->tags()->attach($tagIds);
 
-        return $new_blog_post;
+        return response()->json($new_blog_post);
     }
 
     /**
@@ -48,7 +48,7 @@ class BlogpostController extends Controller
      */
     public function show(Blogpost $blogpost)
     {
-        return $blogpost;
+        return response()->json($blogpost);
     }
 
     /**
@@ -65,7 +65,7 @@ class BlogpostController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        return $updated_blogpost;
+        return response()->json($updated_blogpost);
     }
 
     /**
@@ -79,21 +79,21 @@ class BlogpostController extends Controller
 
     public function getComments(Blogpost $blogpost)
     {
-        return $blogpost->comments()->get();
+        return response()->json($blogpost->comments()->get());
     }
 
     public function getAuthor(Blogpost $blogpost)
     {
-        return $blogpost->author()->get();
+        return response()->json($blogpost->author()->get());
     }
 
     public function getTags(Blogpost $blogpost)
     {
-        return $blogpost->tags()->get();
+        return response()->json($blogpost->tags()->get());
     }
 
     public function getCategory(Blogpost $blogpost)
     {
-        return $blogpost->category()->get();
+        return response()->json($blogpost->category()->get());
     }
 }

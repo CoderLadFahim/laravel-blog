@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('blogpost_tag', function (Blueprint $table) {
-            $table->foreignId('blogpost_id')->constrained('blogposts')->nullable();
-            $table->foreignId('tag_id')->constrained('tags')->nullable();
+            $table->foreignId('blogpost_id')->nullable()->constrained('blogposts')->onDelete('set null');
+            $table->foreignId('tag_id')->nullable()->constrained('tags')->nullable();
         });
     }
 

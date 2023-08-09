@@ -25,43 +25,22 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/signup', [UserController::class, 'create']);
 
-Route::prefix('tags')->group(function () {
-    Route::get('/', [TagController::class, 'index']);
-    Route::post('/store', [TagController::class, 'store']);
-    Route::get('/{tag}', [TagController::class, 'show']);
-    Route::put('/{tag}', [TagController::class, 'update']);
-    Route::delete('/{tag}', [TagController::class, 'destroy']);
+Route::apiResources([
+    'tag' => TagController::class,
+    'category' => CategoryController::class,
+    'blogpost' => BlogpostController::class,
+]);
 
-    Route::get('/{tag}/blogpost', [TagController::class, 'getBlogposts']);
-});
+Route::apiResource('blogpost.comments', CommentController::class)->shallow();
 
-Route::prefix('category')->group(function () {
-    Route::get('/', [CategoryController::class, 'index']);
-    Route::post('/store', [CategoryController::class, 'store']);
-    Route::get('/{category}', [CategoryController::class, 'show']);
-    Route::put('/{category}', [CategoryController::class, 'update']);
-    Route::delete('/{category}', [CategoryController::class, 'destroy']);
-});
+
 
 Route::prefix('blogpost')->group(function () {
-    Route::get('/', [BlogpostController::class, 'index']);
-    Route::post('/store', [BlogpostController::class, 'store']);
-    Route::get('/{blog_post}', [BlogpostController::class, 'show']);
-    Route::put('/{blog_post}', [BlogpostController::class, 'update']);
-    Route::delete('/{blog_post}', [BlogpostController::class, 'destroy']);
-
-    Route::get('/{blog_post}/comments', [BlogpostController::class, 'getComments']);
     Route::get('/{blog_post}/author', [BlogpostController::class, 'getAuthor']);
     Route::get('/{blog_post}/tags', [BlogpostController::class, 'getTags']);
     Route::get('/{blog_post}/category', [BlogpostController::class, 'getCategory']);
 });
 
-Route::prefix('comments')->group(function () {
-    Route::get('/{blog_post}/{comment}', [CommentController::class, 'show']);
-    Route::post('{blog_post}/store', [CommentController::class, 'store']);
-    Route::put('/{blog_post}/{comment}', [CommentController::class, 'update']);
-    Route::delete('/{blog_post}/{comment}', [CommentController::class, 'destroy']);
+Route::prefix('tags')->group(function () {
+    Route::get('/{tag}/blogpost', [TagController::class, 'getBlogposts']);
 });
-
-Route::apiResource('books', CategoryController::class);
-

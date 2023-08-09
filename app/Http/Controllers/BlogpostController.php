@@ -46,9 +46,9 @@ class BlogpostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Blogpost $blog_post)
+    public function show(Blogpost $blogpost)
     {
-        return $blog_post;
+        return $blogpost;
     }
 
     /**
@@ -58,41 +58,42 @@ class BlogpostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Blogpost $blog_post)
+    public function update(Request $request, Blogpost $blogpost)
     {
-        $blog_post->update([
-            'name' => $request->name,
+        $updated_blogpost = $blogpost->update([
+            'title' => $request->title,
+            'category_id' => $request->category_id,
         ]);
 
-        return $blog_post;
+        return $updated_blogpost;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Blogpost $blog_post)
+    public function destroy(Blogpost $blogpost)
     {
-        $blog_post->delete();
+        $blogpost->delete();
         return response()->json(['msg' => 'Blog post deleted']);
     }
 
-    public function getComments(Blogpost $blog_post)
+    public function getComments(Blogpost $blogpost)
     {
-        return $blog_post->comments()->get();
+        return $blogpost->comments()->get();
     }
 
-    public function getAuthor(Blogpost $blog_post)
+    public function getAuthor(Blogpost $blogpost)
     {
-        return $blog_post->author()->get();
+        return $blogpost->author()->get();
     }
 
-    public function getTags(Blogpost $blog_post)
+    public function getTags(Blogpost $blogpost)
     {
-        return $blog_post->tags()->get();
+        return $blogpost->tags()->get();
     }
 
-    public function getCategory(Blogpost $blog_post)
+    public function getCategory(Blogpost $blogpost)
     {
-        return $blog_post->category()->get();
+        return $blogpost->category()->get();
     }
 }

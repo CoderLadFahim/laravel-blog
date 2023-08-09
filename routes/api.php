@@ -62,3 +62,6 @@ Route::prefix('comments')->group(function () {
     Route::put('/{blog_post}/{comment}', [CommentController::class, 'update']);
     Route::delete('/{blog_post}/{comment}', [CommentController::class, 'destroy']);
 });
+
+Route::apiResource('books', CategoryController::class);
+

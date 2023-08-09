@@ -12,13 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('blogpost_tag', function (Blueprint $table) {
-
-            $table->unsignedBigInteger('blogpost_id');
-            $table->unsignedBigInteger('tag_id');
-
-            $table->foreign('blogpost_id')->references('id')->on('blogposts');
-            $table->foreign('tag_id')->references('id')->on('tags');
-
+            $table->foreignId('blogpost_id')->constrained('blogposts')->nullable();
+            $table->foreignId('tag_id')->constrained('tags')->nullable();
         });
     }
 

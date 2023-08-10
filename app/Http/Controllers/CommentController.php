@@ -19,6 +19,12 @@ class CommentController extends Controller
     }
 
     public function store(Request $request, Blogpost $blogpost) {
+        $request->validate([
+            'body' => ['required', 'max:255', 'string'],
+            'blogpost_id' => ['required'],
+            'user_id' => ['required']
+        ]);
+
         $new_comment = Comment::create([
             'body' => $request->input('body'),
             'user_id' => $request->input('user_id'),
@@ -32,6 +38,12 @@ class CommentController extends Controller
 
         $comment_to_update = $this->show($comment);
 
+        $request->validate([
+            'body' => ['required', 'max:255', 'string'],
+            'blogpost_id' => ['required'],
+            'user_id' => ['required']
+        ]);
+
         $comment_to_update->update([
             'body' => $request->body,
         ]);
@@ -40,7 +52,6 @@ class CommentController extends Controller
     }
 
     public function destroy(Comment $comment) {
-
         $comment_to_update = $this->show($comment);
         $comment_to_update->delete();
         return response()->json(['msg' => 'Comment deleted']);

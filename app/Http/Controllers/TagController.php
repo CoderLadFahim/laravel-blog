@@ -23,7 +23,7 @@ class TagController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'max:30', 'regex:/^[^\s]+$/']
+            'name' => ['required', 'max:30', 'regex:/^[^\s]+$/', 'string', 'unique:tags']
         ]);
 
         $new_tag = Tag::create([
@@ -46,6 +46,10 @@ class TagController extends Controller
      */
     public function update(Request $request, Tag $tag)
     {
+        $request->validate([
+            'name' => ['required', 'max:30', 'regex:/^[^\s]+$/', 'string']
+        ]);
+
         $tag->update([
             'name' => $request->name,
         ]);

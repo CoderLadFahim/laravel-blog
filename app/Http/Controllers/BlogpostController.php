@@ -27,6 +27,13 @@ class BlogpostController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => ['bail', 'required', 'max:100', 'string'],
+            'body' => ['bail', 'required', 'string'],
+            'user_id' => ['bail', 'required'],
+            'category_id' => ['bail', 'required'],
+        ]);
+
         $new_blog_post = Blogpost::create([
             'title' => $request->input('title'),
             'body' => $request->input('body'),
@@ -60,6 +67,13 @@ class BlogpostController extends Controller
      */
     public function update(Request $request, Blogpost $blogpost)
     {
+        $request->validate([
+            'title' => ['bail', 'required', 'max:100', 'string'],
+            'body' => ['bail', 'required', 'string'],
+            'user_id' => ['bail', 'required'],
+            'category_id' => ['bail', 'required'],
+        ]);
+
         $updated_blogpost = $blogpost->update([
             'title' => $request->title,
             'category_id' => $request->category_id,

@@ -22,6 +22,10 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => ['required', 'max:30', 'regex:/^[^\s]+$/']
+        ]);
+
         $new_tag = Tag::create([
             'name' => $request->name,
         ]);

@@ -18,6 +18,11 @@ class Blogpost extends Model
 
     protected $table = 'blogposts';
 
+    public function scopeSearch($query_builder, string $search_term) {
+        return Blogpost::where('title', 'like', '%' . $search_term . '%')
+            ->orWhere('body', 'like', '%' . $search_term . '%');
+    }
+
     public function category() {
         return $this->belongsTo(Category::class);
     }

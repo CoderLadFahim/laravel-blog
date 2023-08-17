@@ -15,8 +15,11 @@ class BlogpostController extends Controller
      */
     public function index()
     {
-        $categories = Blogpost::all();
-        return response()->json($categories);
+        $blogposts = Blogpost::latest()->get();
+        $search_term = request('search');
+
+        if (!$search_term) return response()->json($blogposts);
+        return Blogpost::latest()->search(request()->only('search'))->get();
     }
 
     /**

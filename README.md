@@ -11,3 +11,9 @@ Models needed:
     -- Tag
     -- Categories
 
+
+Things to do today:
+
+    <!-- -- Implement user signup -->
+    <!-- -- Implement authentication -->
+    -- Make use of middlewares to protect routes

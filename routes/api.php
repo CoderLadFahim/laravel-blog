@@ -3,6 +3,7 @@
 use App\Http\Controllers\BlogpostController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -24,6 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/signup', [UserController::class, 'create']);
+Route::post('/login', [AuthController::class, 'login']);
 
 Route::apiResources([
     'tag' => TagController::class,

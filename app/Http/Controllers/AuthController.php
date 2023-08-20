@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -13,13 +15,13 @@ class AuthController extends Controller
             'password' => ['bail', 'required', 'string'],
         ]);
 
+        $user = User::where('email', request('email'))->first();
 
-        if (auth()->attempt(request()->only(['email', 'password']))) {
-            dd('user is legit');
-        } else {
-            dd('identify yourself nigga');
+        if(Hash::check(request('password'), $user->getAuthPassword())) {
+            return [
+                'token' => $user->createToken(time())->plainTextToken
+            ];
         }
-
     }
 
     public function logout(Request $request)

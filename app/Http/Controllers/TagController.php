@@ -70,4 +70,11 @@ class TagController extends Controller
     {
         return response()->json($tag->blogposts()->get());
     }
+
+    public function temp(Tag $tag)
+    {
+        return [
+            'user' => auth()->user()
+        ];
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Blogpost;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BlogpostController extends Controller
 {
@@ -112,5 +113,10 @@ class BlogpostController extends Controller
     public function getCategory(Blogpost $blogpost)
     {
         return response()->json($blogpost->category()->get());
+    }
+
+    public function getLikes(Blogpost $blogpost)
+    {
+        return response()->json($blogpost->likes()->get());
     }
 }

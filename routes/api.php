@@ -5,6 +5,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -41,9 +42,14 @@ Route::apiResource('blogpost.comments', CommentController::class)->shallow();
 
 
 Route::prefix('blogpost')->group(function () {
-    Route::get('/{blog_post}/author', [BlogpostController::class, 'getAuthor']);
-    Route::get('/{blog_post}/tags', [BlogpostController::class, 'getTags']);
-    Route::get('/{blog_post}/category', [BlogpostController::class, 'getCategory']);
+    Route::get('/{blogpost}/author', [BlogpostController::class, 'getAuthor']);
+    Route::get('/{blogpost}/tags', [BlogpostController::class, 'getTags']);
+    Route::get('/{blogpost}/category', [BlogpostController::class, 'getCategory']);
+    Route::get('/{blogpost}/likes', [BlogpostController::class, 'getLikes']);
+});
+
+Route::prefix('like')->group(function () {
+    Route::post('/{blogpost}', [LikeController::class, 'store']);
 });
 
 Route::prefix('tags')->group(function () {

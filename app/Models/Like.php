@@ -13,7 +13,7 @@ class Like extends Model
         'blogpost_id',
     ];
 
-    public function blogpost() {
-        $this->belongsTo(Blogpost::class);
+    public function likeable() {
+        $this->morphTo();
     }
 }

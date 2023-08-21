@@ -27,4 +27,8 @@ class Comment extends Model
     public function blogpost() {
         return $this->belongsTo(Blogpost::class);
     }
+
+    public function likes() {
+        return $this->morphMany('App\Like', 'likeable');
+    }
 }

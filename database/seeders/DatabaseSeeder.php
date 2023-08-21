@@ -25,5 +25,13 @@ class DatabaseSeeder extends Seeder
         $this->call([CategorySeeder::class]);
         $this->call([BlogpostSeeder::class]);
         $this->call([CommentsSeeder::class]);
+
+
+        for ($i=0; $i < 10; $i++) {
+            \App\Models\Like::factory()->create([
+                'likeable_id' => $i + 1,
+                'likeable_type' => $i % 2 == 0 ? 'blogpost' : 'comment',
+            ]);
+        }
     }
 }

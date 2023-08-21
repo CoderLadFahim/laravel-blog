@@ -13,6 +13,11 @@ class CommentsSeeder extends Seeder
      */
     public function run(): void
     {
-        Comment::factory()->count(50)->create();
+        $comments = Comment::factory()->count(25)->create();
+
+        foreach ($comments as $comment) {
+            $comment->parent_id = rand(0, 100) > 50 ? Comment::inRandomOrder()->first()->id : null;
+            $comment->save();
+        }
     }
 }

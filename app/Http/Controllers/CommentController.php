@@ -40,7 +40,7 @@ class CommentController extends Controller
 
         $request->validate([
             'body' => ['required', 'max:255', 'string'],
-            'logpost_id' => ['required'],
+            'blogpost_id' => ['required'],
             'user_id' => ['required']
         ]);
 

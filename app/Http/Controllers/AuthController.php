@@ -17,15 +17,19 @@ class AuthController extends Controller
 
         $user = User::where('email', request('email'))->first();
 
-        if(Hash::check(request('password'), $user->getAuthPassword())) {
-            return [
+        if(Hash::check(request('password'), $user?->getAuthPassword())) {
+            return response()->json([
                 'token' => $user->createToken(time())->plainTextToken
-            ];
+            ]);
         }
+
+        return response()->json([
+            'message' => "please leave"
+        ]);
     }
 
     public function logout(Request $request)
     {
-        auth()->logout();
+        auth()->user()->currentAccessToken()->delete();
     }
 }

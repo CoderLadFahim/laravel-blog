@@ -74,7 +74,7 @@ class TagController extends Controller
     public function temp(Tag $tag)
     {
         return [
-            'user' => auth()->user()
+            'user' => 'youre legit lol'
         ];
     }
 }

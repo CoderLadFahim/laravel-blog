@@ -40,7 +40,7 @@ class Blogpost extends Model
     }
 
     public function likes() {
-        return $this->morphMany('App\Like', 'likeable');
+        return $this->morphMany(Like::class, 'likeable');
     }
 }
 

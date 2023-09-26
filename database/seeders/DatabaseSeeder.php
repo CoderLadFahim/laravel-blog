@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Blogpost;
+use App\Models\Comment;
 use App\Models\Tag;
 use Illuminate\Database\Seeder;
 
@@ -30,7 +32,7 @@ class DatabaseSeeder extends Seeder
         for ($i=0; $i < 10; $i++) {
             \App\Models\Like::factory()->create([
                 'likeable_id' => $i + 1,
-                'likeable_type' => $i % 2 == 0 ? 'blogpost' : 'comment',
+                'likeable_type' => rand(0, 100) > 50 ? Blogpost::class : Comment::class,
             ]);
         }
     }

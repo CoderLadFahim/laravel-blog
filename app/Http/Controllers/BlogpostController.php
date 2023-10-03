@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blogpost;
+use App\Services\BaseService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Laravel\Sanctum\PersonalAccessToken;
 
 class BlogpostController extends Controller
 {
+    protected $service;
+
+    public function __construct(BaseService $service) {
+        $this->service = $service;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,17 +22,11 @@ class BlogpostController extends Controller
      */
     public function index(Request $request)
     {
-        $auth_header_value = $request->header('Authorization');
-        [,$bearer_token] = explode(' ', $auth_header_value);
-
-        $token = PersonalAccessToken::findToken($bearer_token);
-        $user_id =  $token?->tokenable?->id;
-
-        $blogposts = Blogpost::where('user_id', $user_id)->get();
+        $blogposts = Blogpost::latest()->get();
         $search_term = request('search');
 
         if (!$search_term) return response()->json($blogposts);
-        return Blogpost::latest()->search(['search_term' => $search_term, 'user_id' => $user_id])->get();
+        return Blogpost::latest()->search(['search_term' => $search_term])->get();
     }
 
     /**

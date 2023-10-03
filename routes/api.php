@@ -25,33 +25,33 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('/test', [TagController::class, 'temp'])->middleware('auth:sanctum');
-
-Route::post('/signup', [UserController::class, 'create']);
+Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::apiResources([
-    'tag' => TagController::class,
-    'category' => CategoryController::class,
-    'blogpost' => BlogpostController::class,
-]);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::apiResource('blogpost.comments', CommentController::class)->shallow();
+    Route::apiResources([
+        'tag' => TagController::class,
+        'category' => CategoryController::class,
+        'blogpost' => BlogpostController::class,
+    ]);
 
+    Route::apiResource('blogpost.comments', CommentController::class)->shallow();
 
+    Route::prefix('blogpost')->group(function () {
+        Route::get('/{blogpost}/author', [BlogpostController::class, 'getAuthor']);
+        Route::get('/{blogpost}/tags', [BlogpostController::class, 'getTags']);
+        Route::get('/{blogpost}/category', [BlogpostController::class, 'getCategory']);
+        Route::get('/{blogpost}/likes', [BlogpostController::class, 'getLikes']);
+    });
 
-Route::prefix('blogpost')->group(function () {
-    Route::get('/{blogpost}/author', [BlogpostController::class, 'getAuthor']);
-    Route::get('/{blogpost}/tags', [BlogpostController::class, 'getTags']);
-    Route::get('/{blogpost}/category', [BlogpostController::class, 'getCategory']);
-    Route::get('/{blogpost}/likes', [BlogpostController::class, 'getLikes']);
+    Route::prefix('like')->group(function () {
+        Route::post('/{blogpost}', [LikeController::class, 'store']);
+    });
+
+    Route::prefix('tags')->group(function () {
+        Route::get('/{tag}/blogpost', [TagController::class, 'getBlogposts']);
+    });
 });
 
-Route::prefix('like')->group(function () {
-    Route::post('/{blogpost}', [LikeController::class, 'store']);
-});
-
-Route::prefix('tags')->group(function () {
-    Route::get('/{tag}/blogpost', [TagController::class, 'getBlogposts']);
-});

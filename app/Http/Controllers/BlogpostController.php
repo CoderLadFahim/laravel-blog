@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Blogpost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class BlogpostController extends Controller
 {
@@ -14,13 +15,19 @@ class BlogpostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $blogposts = Blogpost::latest()->get();
+        $auth_header_value = $request->header('Authorization');
+        [,$bearer_token] = explode(' ', $auth_header_value);
+
+        $token = PersonalAccessToken::findToken($bearer_token);
+        $user_id =  $token?->tokenable?->id;
+
+        $blogposts = Blogpost::where('user_id', $user_id)->get();
         $search_term = request('search');
 
         if (!$search_term) return response()->json($blogposts);
-        return Blogpost::latest()->search($search_term)->get();
+        return Blogpost::latest()->search(['search_term' => $search_term, 'user_id' => $user_id])->get();
     }
 
     /**

@@ -30,6 +30,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/like-dislike', [LikeController::class, 'create']);
 
     Route::apiResources([
         'tag' => TagController::class,
@@ -45,7 +46,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{blogpost}/category', [BlogpostController::class, 'getCategory']);
         Route::get('/{blogpost}/likes', [BlogpostController::class, 'getLikes']);
         Route::get('/{blogpost}/dislikes', [BlogpostController::class, 'getDislikes']);
-        Route::post('/{blogpost}/like-dislike', [LikeController::class, 'create']);
+    });
+
+    Route::prefix('comment')->group(function () {
+        Route::get('/{comment}/likes', [CommentController::class, 'getLikes']);
+        Route::get('/{comment}/dislikes', [CommentController::class, 'getDislikes']);
     });
 
     Route::prefix('tags')->group(function () {

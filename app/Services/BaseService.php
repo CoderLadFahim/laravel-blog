@@ -10,17 +10,12 @@ use Laravel\Sanctum\PersonalAccessToken;
 class BaseService
 {
     public function getUser(Request $request): User {
-        $auth_header_value = $request->header('Authorization');
-        [,$bearer_token] = explode(' ', $auth_header_value);
+        $bearer_token = $request->bearerToken();
 
         $token = PersonalAccessToken::findToken($bearer_token);
         $user = $token?->tokenable;
 
         return $user;
-    }
-
-    public function getBeans(): string {
-        return 'beans';
     }
 }
 

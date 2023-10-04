@@ -56,4 +56,14 @@ class CommentController extends Controller
         $comment_to_update->delete();
         return response()->json(['msg' => 'Comment deleted']);
     }
+
+    public function getLikes(Comment $comment)
+    {
+        return response()->json($comment->likes()->where('is_liked', 1)->get());
+    }
+
+    public function getDislikes(Comment $comment)
+    {
+        return response()->json($comment->likes()->where('is_liked', 0)->get());
+    }
 }

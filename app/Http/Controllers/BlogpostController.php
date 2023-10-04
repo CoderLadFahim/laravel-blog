@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Blogpost;
 use App\Services\BaseService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BlogpostController extends Controller
 {
@@ -77,19 +78,25 @@ class BlogpostController extends Controller
      */
     public function update(Request $request, Blogpost $blogpost)
     {
+        $user_id_from_req = $request->user()->id;
+        $blogpost_user_id = $blogpost->user()->first()->id;
+
+        if ($user_id_from_req !== $blogpost_user_id) {
+            return response()->json(['message' => 'Edit your own posts!']);
+        }
+
         $request->validate([
             'title' => ['bail', 'required', 'max:100', 'string'],
             'body' => ['bail', 'required', 'string'],
-            'user_id' => ['bail', 'required'],
-            'category_id' => ['bail', 'required'],
         ]);
 
-        $updated_blogpost = $blogpost->update([
+        $blogpost->update([
             'title' => $request->title,
-            'category_id' => $request->category_id,
+            'body' => $request->body,
+            'category_id' => (int) $request->category_id ?? $blogpost->category_id,
         ]);
 
-        return response()->json($updated_blogpost);
+        return response()->json(['message' => 'blogpost updated', 'blogpost' => $blogpost]);
     }
 
     /**
@@ -108,7 +115,7 @@ class BlogpostController extends Controller
 
     public function getAuthor(Blogpost $blogpost)
     {
-        return response()->json($blogpost->author()->get());
+        return response()->json($blogpost->user()->first());
     }
 
     public function getTags(Blogpost $blogpost)
@@ -118,7 +125,7 @@ class BlogpostController extends Controller
 
     public function getCategory(Blogpost $blogpost)
     {
-        return response()->json($blogpost->category()->get());
+        return response()->json($blogpost->category()->first());
     }
 
     public function getLikes(Blogpost $blogpost)

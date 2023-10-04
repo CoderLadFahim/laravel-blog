@@ -44,10 +44,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{blogpost}/tags', [BlogpostController::class, 'getTags']);
         Route::get('/{blogpost}/category', [BlogpostController::class, 'getCategory']);
         Route::get('/{blogpost}/likes', [BlogpostController::class, 'getLikes']);
-    });
-
-    Route::prefix('like')->group(function () {
-        Route::post('/{blogpost}', [LikeController::class, 'store']);
+        Route::get('/{blogpost}/dislikes', [BlogpostController::class, 'getDislikes']);
+        Route::post('/{blogpost}/like-dislike', [LikeController::class, 'create']);
     });
 
     Route::prefix('tags')->group(function () {

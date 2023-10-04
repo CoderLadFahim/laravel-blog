@@ -123,6 +123,11 @@ class BlogpostController extends Controller
 
     public function getLikes(Blogpost $blogpost)
     {
-        return response()->json($blogpost->likes()->get());
+        return response()->json($blogpost->likes()->where('is_liked', 1)->get());
+    }
+
+    public function getDislikes(Blogpost $blogpost)
+    {
+        return response()->json($blogpost->likes()->where('is_liked', 0)->get());
     }
 }

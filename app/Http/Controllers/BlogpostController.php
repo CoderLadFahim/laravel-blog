@@ -104,7 +104,10 @@ class BlogpostController extends Controller
      */
     public function destroy(Blogpost $blogpost)
     {
-        $blogpost->delete();
+        DB::transaction(function() use($blogpost) {
+            $blogpost->likes()->delete();
+            $blogpost->delete();
+        });
         return response()->json(['msg' => 'Blog post deleted']);
     }
 

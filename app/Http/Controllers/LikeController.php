@@ -27,9 +27,8 @@ class LikeController extends Controller
         $model = $request->type === 'blogpost' ? Blogpost::find($request->id) : Comment::find($request->id);
 
         // handling the request when a like already exists
-        $existing_like_collection = $model->likes()->where('user_id', $user->id)->get();
-        if (sizeof($existing_like_collection)) {
-            [$existing_like] = $existing_like_collection;
+        $existing_like = $model->likes()->where('user_id', $user->id)->first();
+        if ($existing_like) {
             $existing_like->update([
                 'is_liked' => $existing_like->is_liked ? 0 : 1
             ]);

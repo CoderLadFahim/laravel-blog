@@ -6,6 +6,7 @@ use App\Http\Requests\Signup as SignupRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
@@ -32,6 +33,10 @@ class AuthController extends Controller
         ]);
 
         $user = User::where('email', request('email'))->first();
+
+        if (!$user) return response()->json([
+            'message' => 'user not found',
+        ]);
 
         if(Hash::check(request('password'), $user->getAuthPassword())) {
             return [

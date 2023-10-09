@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LikeDislikeRequest;
 use App\Models\Blogpost;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Services\BaseService;
-use Illuminate\Http\Request;
 
 class LikeController extends Controller
 {
@@ -16,12 +16,7 @@ class LikeController extends Controller
         $this->service = $service;
     }
 
-    public function like(Request $request) {
-        $request->validate([
-            'id' => 'bail|string|required',
-            'type' => 'bail|string|required',
-        ]);
-
+    public function like(LikeDislikeRequest $request) {
         $user = $this->service->getUser($request);
 
         $model = match ($request->type) {
@@ -52,12 +47,7 @@ class LikeController extends Controller
         return response()->json(['message' => 'Liked successfully', 'likeable_id' => $model->id]);
     }
 
-    public function dislike(Request $request) {
-        $request->validate([
-            'id' => 'bail|string|required',
-            'type' => 'bail|string|required',
-        ]);
-
+    public function dislike(LikeDislikeRequest $request) {
         $user = $this->service->getUser($request);
 
         $model = match ($request->type) {

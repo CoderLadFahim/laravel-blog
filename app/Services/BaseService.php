@@ -3,6 +3,8 @@
 
 namespace App\Services;
 
+use App\Models\Blogpost;
+use App\Models\Comment;
 use App\Models\Like;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,15 +21,15 @@ class BaseService
         return $user;
     }
 
-    public function createLike(int $likeable_id, string $model_type, bool $is_liked, int $user_id) {
+    public function createLike(Request $request, int $model_id, bool $is_liked) {
         Like::create([
-            'likeable_id' => $likeable_id,
-            'likeable_type' => match ($model_type) {
+            'likeable_id' => $model_id,
+            'likeable_type' => match ($request->type) {
                 'blogpost' => Blogpost::class,
                 'comment' => Comment::class,
             },
             'is_liked' => $is_liked ? 1 : 0,
-            'user_id' => $user_id,
+            'user_id' => $request->user()->id,
         ]);
     }
 }

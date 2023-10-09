@@ -30,7 +30,8 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::post('/like-dislike', [LikeController::class, 'create']);
+    Route::post('/like', [LikeController::class, 'like']);
+    Route::post('/dislike', [LikeController::class, 'dislike']);
 
     Route::apiResources([
         'tag' => TagController::class,

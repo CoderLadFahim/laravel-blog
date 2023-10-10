@@ -59,7 +59,7 @@ class LikeController extends Controller
         $this->service->createLike(
             $request,
             $model->id,
-            true,
+            false,
         );
 
         return response()->json(['message' => 'Disliked successfully', 'likeable_id' => $model->id]);

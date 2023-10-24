@@ -18,9 +18,10 @@ class Blogpost extends Model
 
     protected $table = 'blogposts';
 
-    public function scopeSearch($query_builder, string $search_term) {
-        return Blogpost::where('title', 'like', '%' . $search_term . '%')
-            ->orWhere('body', 'like', '%' . $search_term . '%');
+    public function scopeSearch($query_builder, array $scope_params) {
+        return Blogpost::where('user_id', $scope_params['user_id'])
+            ->where('title', 'like', '%' . $scope_params['search_term'] . '%')
+            ->orWhere('body', 'like', '%' . $scope_params['search_term'] . '%');
     }
 
     public function category() {
@@ -31,12 +32,16 @@ class Blogpost extends Model
         return $this->belongsToMany(Tag::class);
     }
 
-    public function author() {
+    public function user() {
         return $this->belongsTo(User::class);
     }
 
     public function comments() {
         return $this->hasMany(Comment::class);
+    }
+
+    public function likes() {
+        return $this->morphMany(Like::class, 'likeable');
     }
 }
 

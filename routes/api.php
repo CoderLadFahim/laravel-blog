@@ -5,6 +5,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,28 +25,37 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('/test', [TagController::class, 'temp'])->middleware('auth:sanctum');
-
-Route::post('/signup', [UserController::class, 'create']);
+Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::apiResources([
-    'tag' => TagController::class,
-    'category' => CategoryController::class,
-    'blogpost' => BlogpostController::class,
-]);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/like', [LikeController::class, 'like']);
+    Route::post('/dislike', [LikeController::class, 'dislike']);
 
-Route::apiResource('blogpost.comments', CommentController::class)->shallow();
+    Route::apiResources([
+        'tag' => TagController::class,
+        'category' => CategoryController::class,
+        'blogpost' => BlogpostController::class,
+    ]);
 
+    Route::apiResource('blogpost.comments', CommentController::class)->shallow();
 
+    Route::prefix('blogpost')->group(function () {
+        Route::get('/{blogpost}/author', [BlogpostController::class, 'getAuthor']);
+        Route::get('/{blogpost}/tags', [BlogpostController::class, 'getTags']);
+        Route::get('/{blogpost}/category', [BlogpostController::class, 'getCategory']);
+        Route::get('/{blogpost}/likes', [BlogpostController::class, 'getLikes']);
+        Route::get('/{blogpost}/dislikes', [BlogpostController::class, 'getDislikes']);
+    });
 
-Route::prefix('blogpost')->group(function () {
-    Route::get('/{blog_post}/author', [BlogpostController::class, 'getAuthor']);
-    Route::get('/{blog_post}/tags', [BlogpostController::class, 'getTags']);
-    Route::get('/{blog_post}/category', [BlogpostController::class, 'getCategory']);
+    Route::prefix('comment')->group(function () {
+        Route::get('/{comment}/likes', [CommentController::class, 'getLikes']);
+        Route::get('/{comment}/dislikes', [CommentController::class, 'getDislikes']);
+    });
+
+    Route::prefix('tags')->group(function () {
+        Route::get('/{tag}/blogpost', [TagController::class, 'getBlogposts']);
+    });
 });
 
-Route::prefix('tags')->group(function () {
-    Route::get('/{tag}/blogpost', [TagController::class, 'getBlogposts']);
-});

@@ -16,4 +16,4 @@ Things to do today:
 
     <!-- -- Implement user signup -->
     <!-- -- Implement authentication -->
-    -- Make use of middlewares to protect routes
+    <!-- -- Make use of middlewares to protect routes -->

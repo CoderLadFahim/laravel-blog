@@ -22,6 +22,12 @@ class UserController extends Controller
      */
     public function create(Request $request)
     {
+        $request->validate([
+            'name' => ['bail', 'required', 'string'],
+            'email' => ['bail', 'required', 'email'],
+            'password' => ['bail', 'required', 'string'],
+        ]);
+
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -20,21 +21,13 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create(UserRequest $request)
     {
-        $request->validate([
-            'name' => ['bail', 'required', 'string'],
-            'email' => ['bail', 'required', 'email'],
-            'password' => ['bail', 'required', 'string'],
-        ]);
-
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password')),
         ]);
-
-        // Additional logic...
 
         return response()->json($user, 201);
     }

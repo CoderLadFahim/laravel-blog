@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BlogpostRequest;
 use App\Models\Blogpost;
 use App\Services\BaseService;
 use Illuminate\Http\Request;
@@ -36,24 +37,20 @@ class BlogpostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BlogpostRequest $request)
     {
-        $request->validate([
-            'title' => ['bail', 'required', 'max:100', 'string'],
-            'body' => ['bail', 'required', 'string'],
-            'user_id' => ['bail', 'required'],
-            'category_id' => ['bail', 'required'],
-        ]);
-
         $new_blog_post = Blogpost::create([
-            'title' => $request->input('title'),
-            'body' => $request->input('body'),
-            'user_id' => $request->input('user_id'),
-            'category_id' => $request->input('category_id'),
+            'title' => $request->title,
+            'body' => $request->body,
+            'user_id' => $request->user()->id,
+            'category_id' => $request->category_id,
         ]);
 
-        $tagIds = array_map('intval', $request->input('tags'));
-        $new_blog_post->tags()->attach($tagIds);
+        $tags_to_attach = $request->tags;
+        if ($tags_to_attach) {
+            $tagIds = array_map('intval', $tags_to_attach);
+            $new_blog_post->tags()->attach($tagIds);
+        }
 
         return response()->json($new_blog_post);
     }
@@ -76,7 +73,7 @@ class BlogpostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Blogpost $blogpost)
+    public function update(BlogpostRequest $request, Blogpost $blogpost)
     {
         $user_id_from_req = $request->user()->id;
         $blogpost_user_id = $blogpost->user()->first()->id;
@@ -85,15 +82,10 @@ class BlogpostController extends Controller
             return response()->json(['message' => 'Edit your own posts!']);
         }
 
-        $request->validate([
-            'title' => ['bail', 'required', 'max:100', 'string'],
-            'body' => ['bail', 'required', 'string'],
-        ]);
-
         $blogpost->update([
             'title' => $request->title,
             'body' => $request->body,
-            'category_id' => (int) $request->category_id ?? $blogpost->category_id,
+            'category_id' => $request->category_id,
         ]);
 
         return response()->json(['message' => 'blogpost updated', 'blogpost' => $blogpost]);

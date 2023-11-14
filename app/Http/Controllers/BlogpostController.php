@@ -13,7 +13,8 @@ class BlogpostController extends Controller
 {
     protected $service;
 
-    public function __construct(BaseService $service) {
+    public function __construct(BaseService $service)
+    {
         $this->service = $service;
     }
 
@@ -75,12 +76,8 @@ class BlogpostController extends Controller
      */
     public function update(BlogpostRequest $request, Blogpost $blogpost)
     {
-        $user_id_from_req = $request->user()->id;
-        $blogpost_user_id = $blogpost->user()->first()->id;
-
-        if ($user_id_from_req !== $blogpost_user_id) {
+        if ($request->user()->id !== $blogpost->user_id)
             return response()->json(['message' => 'Edit your own posts!']);
-        }
 
         $blogpost->update([
             'title' => $request->title,

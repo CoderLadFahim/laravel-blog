@@ -31,6 +31,9 @@ class CommentController extends Controller
     }
 
     public function update(CommentRequest $request, Comment $comment) {
+        if ($request->user()->id !== $comment->user_id)
+            return response()->json(['message' => 'Edit your own comments!']);
+
         $comment->update([
             'body' => $request->body
         ]);

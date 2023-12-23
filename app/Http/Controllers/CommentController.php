@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CommentRequest;
 use App\Models\Blogpost;
 use App\Models\Comment;
 use Illuminate\Http\Request;
@@ -18,13 +19,7 @@ class CommentController extends Controller
         return response()->json($comment);
     }
 
-    public function store(Request $request, Blogpost $blogpost) {
-        $request->validate([
-            'body' => ['required', 'max:255', 'string'],
-            'blogpost_id' => ['required'],
-            'user_id' => ['required']
-        ]);
-
+    public function store(CommentRequest $request, Blogpost $blogpost) {
         $new_comment = Comment::create([
             'body' => $request->input('body'),
             'user_id' => $request->input('user_id'),
@@ -34,15 +29,8 @@ class CommentController extends Controller
         return response()->json($new_comment);
     }
 
-    public function update(Request $request, Comment $comment) {
-
+    public function update(CommentRequest $request, Comment $comment) {
         $comment_to_update = $this->show($comment);
-
-        $request->validate([
-            'body' => ['required', 'max:255', 'string'],
-            'blogpost_id' => ['required'],
-            'user_id' => ['required']
-        ]);
 
         $comment_to_update->update([
             'body' => $request->body,

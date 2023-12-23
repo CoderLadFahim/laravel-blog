@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BlogpostRequest;
 use App\Models\Blogpost;
 use App\Services\BaseService;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class BlogpostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         $blogposts = Blogpost::latest()->get();
         $search_term = request('search');
@@ -36,15 +37,8 @@ class BlogpostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BlogpostRequest $request)
     {
-        $request->validate([
-            'title' => ['bail', 'required', 'max:100', 'string'],
-            'body' => ['bail', 'required', 'string'],
-            'user_id' => ['bail', 'required'],
-            'category_id' => ['bail', 'required'],
-        ]);
-
         $new_blog_post = Blogpost::create([
             'title' => $request->input('title'),
             'body' => $request->input('body'),
@@ -76,19 +70,12 @@ class BlogpostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Blogpost $blogpost)
+    public function update(BlogpostRequest $request, Blogpost $blogpost)
     {
         $user_id_from_req = $request->user()->id;
         $blogpost_user_id = $blogpost->user()->first()->id;
 
-        if ($user_id_from_req !== $blogpost_user_id) {
-            return response()->json(['message' => 'Edit your own posts!']);
-        }
-
-        $request->validate([
-            'title' => ['bail', 'required', 'max:100', 'string'],
-            'body' => ['bail', 'required', 'string'],
-        ]);
+        if ($user_id_from_req !== $blogpost_user_id) return response()->json(['message' => 'Edit your own posts!']);
 
         $blogpost->update([
             'title' => $request->title,
@@ -104,7 +91,7 @@ class BlogpostController extends Controller
      */
     public function destroy(Blogpost $blogpost)
     {
-        DB::transaction(function() use($blogpost) {
+        DB::transaction(function () use ($blogpost) {
             $blogpost->likes()->delete();
             $blogpost->delete();
         });

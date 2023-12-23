@@ -5,6 +5,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\GroupJoinRequestController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -56,6 +57,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('tags')->group(function () {
         Route::get('/{tag}/blogpost', [TagController::class, 'getBlogposts']);
+    });
+
+    Route::prefix('group-requests')->group(function () {
+        Route::get('/', [GroupJoinRequestController::class, 'index']);
+        Route::post('/', [GroupJoinRequestController::class, 'store']);
+        Route::get('/{join_request}', [GroupJoinRequestController::class, 'show']);
+        Route::delete('/{join_request}', [GroupJoinRequestController::class, 'destroy']);
     });
 });
 

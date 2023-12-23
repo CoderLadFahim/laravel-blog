@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Blogpost;
 use App\Models\Comment;
 use App\Models\Tag;
+use Database\Factories\GroupFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -28,6 +29,7 @@ class DatabaseSeeder extends Seeder
         $this->call([BlogpostSeeder::class]);
         $this->call([CommentsSeeder::class]);
 
+        \App\Models\Group::factory()->count(10)->create();
 
         // for ($i=0; $i < 10; $i++) {
         //     \App\Models\Like::factory()->create([

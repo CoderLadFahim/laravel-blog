@@ -5,6 +5,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupJoinRequestController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
@@ -64,6 +65,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [GroupJoinRequestController::class, 'store']);
         Route::get('/{join_request}', [GroupJoinRequestController::class, 'show']);
         Route::delete('/{join_request}', [GroupJoinRequestController::class, 'destroy']);
+        Route::post('/{join_request}', [GroupJoinRequestController::class, 'update']);
+    });
+
+    Route::prefix('groups')->group(function () {
+        Route::get('/', [GroupController::class, 'index']);
+        Route::post('/', [GroupController::class, 'store']);
+        Route::delete('/{group}', [GroupController::class, 'destroy']);
     });
 });
 

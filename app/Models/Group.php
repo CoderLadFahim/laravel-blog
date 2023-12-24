@@ -12,4 +12,8 @@ class Group extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function members() {
+        return $this->belongsToMany(User::class, 'group_members', 'group_id', 'user_id')->withPivot('is_admin');
+    }
 }

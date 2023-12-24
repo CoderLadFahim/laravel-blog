@@ -44,18 +44,58 @@ Apply gates and policies in groups
         * groups
         * group_join_requests
         * group_members
+        * roles
+        * permissions
     
     * Group columns:
         ** id
         ** Name
 
-    * group_join_request columns:
-        ** id (bigint)
-        ** requester_id (bigint)
-        ** group_id (bigint)
-        ** is_approved (bool)
+    * Columns
+        -- group_join_request
+            --- id (bigint)
+            --- requester_id (bigint)
+            --- group_id (bigint)
+            --- is_approved (bool)
 
-    * group_members columns:
-        ** id (bigint)
-        ** user_id (bigint)
-        ** group_id (bigint)
+        -- group_members
+            --- id (bigint)
+            --- user_id (bigint)
+            --- group_id (bigint)
+            --- is_admin (boolean)
+
+
+    ** Business logic
+        ** group
+            **** POST
+                **** The logged in user will immediately become admin on create
+                **** The admin will be added as a user in the group_members with the is_admin set to true
+
+            *** GET
+                **** Users should be able to see a list of groups they are a member of
+                **** Users who are admins should also be able to see what groups they own and administrate
+
+            **** PUT
+                **** Group name change can only be done by the admin
+
+            **** DELETE
+                **** Group delete will remove all members of this group from this group (Only the admin is allowed to do this)
+
+        *** group_join_request
+            *** GET
+                **** Group specific:
+                    ***** Only the admin user can see the pending requests of his group/(s)
+                **** User specific:
+                    ***** The user should be able to see all groups he has asked to join
+
+            **** POST
+                **** Create a record that stores the group and the requester_id 
+                **** Default `is_approved` false column in that record 
+                **** The admin of the group in question should not be able to join his own group
+
+            **** PUT
+                *** Only the admin can approve requests
+
+            **** DELETE
+                **** Only the user who made the request and the group admin can delete group_join_requests
+

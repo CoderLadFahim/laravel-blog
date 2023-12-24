@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Blogpost;
 use App\Models\Comment;
+use App\Models\GroupMembers;
 use App\Models\Tag;
 use Database\Factories\GroupFactory;
 use Illuminate\Database\Seeder;
@@ -17,12 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        \App\Models\User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        \App\Models\User::factory(50)->create();
 
         $this->call([TagSeeder::class]);
         $this->call([CategorySeeder::class]);

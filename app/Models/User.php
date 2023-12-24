@@ -46,4 +46,8 @@ class User extends Authenticatable
     public function groups() {
         return $this->belongsToMany(Group::class, 'group_members', 'user_id', 'group_id')->withPivot('is_admin');
     }
+
+    public function groupRequests() {
+        return $this->hasMany(GroupJoinRequest::class, 'requester_id');
+    }
 }

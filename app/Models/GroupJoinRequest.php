@@ -13,4 +13,12 @@ class GroupJoinRequest extends Model
         'requester_id',
         'group_id',
     ];
+
+    public function group() {
+        return $this->belongsTo(Group::class);
+    }
+
+    public function requester() {
+        return $this->belongsTo(User::class);
+    }
 }

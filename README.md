@@ -68,20 +68,21 @@ Apply gates and policies in groups
     ** Business logic
         ** group
             **** POST
-                **** The logged in user will immediately become admin on create
-                **** The admin will be added as a user in the group_members with the is_admin set to true
+                <!-- **** The logged in user will immediately become admin on create -->
+                <!-- **** The admin will be added as a user in the group_members with the is_admin set to true -->
 
             *** GET
-                **** Users should be able to see a list of groups they are a member of
-                **** Users who are admins should also be able to see what groups they own and administrate
+                <!-- **** Users should be able to see a list of groups they are a member of -->
+                <!-- **** Users who are admins should also be able to see what groups they own and administrate, and of which groups they are a member of -->
 
             **** PUT
-                **** Group name change can only be done by the admin
+                <!-- **** Group name change can only be done by the admin -->
 
             **** DELETE
-                **** Group delete will remove all members of this group from this group (Only the admin is allowed to do this)
+                <!-- **** Group delete will remove all members of this group from this group (Only the admin is allowed to do this) -->
+                <!-- **** Group delete will remove all join requests as well -->
 
-        *** group_join_request
+        ** group_join_request
             *** GET
                 **** Group specific:
                     ***** Only the admin user can see the pending requests of his group/(s)

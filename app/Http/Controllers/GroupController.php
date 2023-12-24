@@ -11,14 +11,6 @@ use Illuminate\Http\Response;
 class GroupController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(GroupRequest $request)
@@ -37,26 +29,34 @@ class GroupController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(GroupRequest $request, Group $group)
     {
-        //
+        $group_admin_user = $group->members()->wherePivot('is_admin', true)->first();
+
+        if ($group_admin_user->id !== auth()->id())
+            return response()->json(['message' => 'Unauthorized']);
+
+        $group->update([
+            'name' => $request->name
+        ]);
+
+        return response()->json(['message' => 'group name updated']);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, Group $group)
     {
-        //
+        $group_admin_user = $group->members()->wherePivot('is_admin', true)->first();
+
+        if ($group_admin_user?->id !== auth()->id())
+            return response()->json(['message' => 'Unauthorized']);
+
+        $group->delete();
+
+        return response()->json(['message' => 'group deleted']);
     }
 }

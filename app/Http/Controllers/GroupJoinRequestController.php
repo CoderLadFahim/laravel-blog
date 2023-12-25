@@ -16,7 +16,13 @@ class GroupJoinRequestController extends Controller
      */
     public function index()
     {
-        return GroupJoinRequest::query()->get();
+        $groupJoinRequests = GroupJoinRequest::query()->whereHas('group.members', function($q) {
+            $q
+            ->where('user_id', auth()->id())
+            ->where('is_admin', true);
+        })->get();
+
+        return  $groupJoinRequests;
     }
 
     /**

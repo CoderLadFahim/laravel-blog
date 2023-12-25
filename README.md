@@ -96,8 +96,8 @@ Apply gates and policies in groups
                 <!-- **** A user can only apply once to join a group -->
 
             **** PUT
-                *** Only the admin can approve requests
+                <!-- *** Only the admin can approve requests -->
 
             **** DELETE
-                **** Only the user who made the request and the group admin can delete group_join_requests
+                <!-- **** Only the user who made the request and the group admin can delete group_join_requests -->
 

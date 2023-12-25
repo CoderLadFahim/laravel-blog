@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\GroupJoinRequestRequest;
 use App\Models\Group;
 use App\Models\GroupJoinRequest;
+use App\Models\GroupMembers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
@@ -73,9 +74,28 @@ class GroupJoinRequestController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, GroupJoinRequest $join_request)
     {
-        //
+        $group_admin = $join_request->group()
+            ->first()
+            ->members()
+            ->wherePivot('is_admin', true)
+            ->first();
+
+        if ($group_admin->id !== auth()->id()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $join_request->is_approved = true;
+        $join_request->save();
+
+        GroupMembers::create([
+            'user_id' => $join_request->requester_id,
+            'group_id' => $join_request->group_id,
+            'is_admin' => false,
+        ]);
+
+        return response()->json(['message' => 'Join request approved'], Response::HTTP_OK);
     }
 
     /**
@@ -83,6 +103,24 @@ class GroupJoinRequestController extends Controller
      */
     public function destroy(GroupJoinRequest $join_request)
     {
+        $group_admin = $join_request->group()
+            ->first()
+            ->members()
+            ->wherePivot('is_admin', true)
+            ->first();
+
+        if ($group_admin->id === auth()->id()) {
+            return $this->deleteJoinRequest($join_request);
+        }
+
+        if (auth()->id() !== $join_request->requester()->first()->id) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        return $this->deleteJoinRequest($join_request);
+    }
+
+    public function deleteJoinRequest(GroupJoinRequest $join_request) {
         $join_request->delete();
         return response()->json(['message' => 'Group request has been cancelled'], Response::HTTP_OK);
     }

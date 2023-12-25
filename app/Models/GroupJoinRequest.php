@@ -12,6 +12,7 @@ class GroupJoinRequest extends Model
     protected $fillable = [
         'requester_id',
         'group_id',
+        'is_approved',
     ];
 
     public function group() {

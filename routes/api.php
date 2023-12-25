@@ -73,7 +73,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [GroupJoinRequestController::class, 'store']);
         Route::get('/{join_request}', [GroupJoinRequestController::class, 'show']);
         Route::delete('/{join_request}', [GroupJoinRequestController::class, 'destroy']);
-        Route::post('/{join_request}', [GroupJoinRequestController::class, 'update']);
+        Route::post('/{join_request}/approve', [GroupJoinRequestController::class, 'update']);
     });
 
     Route::prefix('groups')->group(function () {

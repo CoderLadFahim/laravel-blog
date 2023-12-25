@@ -16,13 +16,25 @@ class GroupJoinRequestController extends Controller
      */
     public function index()
     {
-        $groupJoinRequests = GroupJoinRequest::query()->whereHas('group.members', function($q) {
+        $groupJoinRequests = GroupJoinRequest::query()->whereHas('group.members', function ($q) {
             $q
-            ->where('user_id', auth()->id())
-            ->where('is_admin', true);
+                ->where('user_id', auth()->id())
+                ->where('is_admin', true);
         })->get();
 
         return  $groupJoinRequests;
+    }
+
+    public function getAllJoinRequests(Group $group)
+    {
+        $group_admin_user_id = $group->members()->wherePivot('is_admin', true)->first()->id;
+        if ($group_admin_user_id !== auth()->id()) return response()->json(['message' => 'Unauthorized'], 401);
+        return $group->joinRequests()->get();
+    }
+
+    public function getAllJoinRequestsOfUser()
+    {
+        return auth()->user()->groupRequests()->get();
     }
 
     /**
@@ -31,6 +43,15 @@ class GroupJoinRequestController extends Controller
     public function store(GroupJoinRequestRequest $request)
     {
         $group_to_join = Group::query()->where('id', $request->group_id)->firstOrFail();
+        $member_ids = $group_to_join->members()->get()->pluck('id')->toArray();
+        $already_a_member = in_array(auth()->id(), $member_ids);
+
+        if ($already_a_member) return response()->json(['message' => 'Already a member'], 403);
+
+        $existing_group_request = auth()->user()->groupRequests()->where('group_id', $group_to_join->id)->first();
+
+        if ($existing_group_request) return response()->json(['message' => 'Request already exists'], 403);
+
 
         GroupJoinRequest::create([
             'group_id' => $group_to_join->id,

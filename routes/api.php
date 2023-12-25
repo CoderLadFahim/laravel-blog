@@ -61,7 +61,15 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('group-requests')->group(function () {
+        // pending requests for a potential member
+        Route::get('/self', [GroupJoinRequestController::class, 'getAllJoinRequestsOfUser']);
+
+        // pending requests for the admin and all the groups he admins
         Route::get('/', [GroupJoinRequestController::class, 'index']);
+
+        // pending requests of a group (that only the admin can access)
+        Route::get('/{group}', [GroupJoinRequestController::class, 'getAllJoinRequests']);
+
         Route::post('/', [GroupJoinRequestController::class, 'store']);
         Route::get('/{join_request}', [GroupJoinRequestController::class, 'show']);
         Route::delete('/{join_request}', [GroupJoinRequestController::class, 'destroy']);

@@ -85,14 +85,15 @@ Apply gates and policies in groups
         ** group_join_request
             *** GET
                 **** Group specific:
-                    ***** Only the admin user can see the pending requests of his group/(s)
+                    <!-- ***** Only the admin user can see the pending requests of his group/(s) -->
                 **** User specific:
-                    ***** The user should be able to see all groups he has asked to join
+                    <!-- ***** The user should be able to see all groups he has asked to join -->
 
             **** POST
-                **** Create a record that stores the group and the requester_id 
-                **** Default `is_approved` false column in that record 
-                **** The admin of the group in question should not be able to join his own group
+                <!-- **** Create a record that stores the group and the requester_id  -->
+                <!-- **** Default `is_approved` false column in that record  -->
+                <!-- **** The admin of the group in question should not be able to join his own group -->
+                <!-- **** A user can only apply once to join a group -->
 
             **** PUT
                 *** Only the admin can approve requests

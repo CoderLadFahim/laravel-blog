@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BlogpostDeleted;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BlogpostRequest;
 use App\Models\Blogpost;
@@ -42,12 +43,14 @@ class BlogpostController extends Controller
         $new_blog_post = Blogpost::create([
             'title' => $request->input('title'),
             'body' => $request->input('body'),
-            'user_id' => $request->input('user_id'),
+            'user_id' => auth()->id(),
             'category_id' => $request->input('category_id'),
         ]);
 
-        $tagIds = array_map('intval', $request->input('tags'));
-        $new_blog_post->tags()->attach($tagIds);
+        if ($request->tags) {
+            $tagIds = array_map('intval', $request->tags);
+            $new_blog_post->tags()->attach($tagIds);
+        }
 
         return response()->json($new_blog_post);
     }
@@ -95,6 +98,7 @@ class BlogpostController extends Controller
             $blogpost->likes()->delete();
             $blogpost->delete();
         });
+        BlogpostDeleted::dispatch($blogpost);
         return response()->json(['msg' => 'Blog post deleted']);
     }
 

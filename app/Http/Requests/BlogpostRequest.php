@@ -24,7 +24,6 @@ class BlogpostRequest extends FormRequest
         return [
             'title' => ['bail', 'required', 'max:100', 'string'],
             'body' => ['bail', 'required', 'string'],
-            'user_id' => ['bail', 'required'],
             'category_id' => ['bail', 'required'],
         ];
     }

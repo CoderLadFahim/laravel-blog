@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\BlogpostDeleted;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BlogpostRequest;
 use App\Models\Blogpost;
 use App\Services\BaseService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class BlogpostController extends Controller
 {
@@ -75,10 +76,7 @@ class BlogpostController extends Controller
      */
     public function update(BlogpostRequest $request, Blogpost $blogpost)
     {
-        $user_id_from_req = $request->user()->id;
-        $blogpost_user_id = $blogpost->user()->first()->id;
-
-        if ($user_id_from_req !== $blogpost_user_id) return response()->json(['message' => 'Edit your own posts!']);
+        if (!Gate::allows('update-post')) return response()->json(['message' => 'Edit your own posts!'], Response::HTTP_UNAUTHORIZED);
 
         $blogpost->update([
             'title' => $request->title,
@@ -94,11 +92,11 @@ class BlogpostController extends Controller
      */
     public function destroy(Blogpost $blogpost)
     {
+        if (!Gate::allows('update-post')) return response()->json(['message' => 'Delete your own posts!'], Response::HTTP_UNAUTHORIZED);
         DB::transaction(function () use ($blogpost) {
             $blogpost->likes()->delete();
             $blogpost->delete();
         });
-        BlogpostDeleted::dispatch($blogpost);
         return response()->json(['msg' => 'Blog post deleted']);
     }
 
